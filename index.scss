@@ -1,0 +1,380 @@
+@use "sass:math";
+
+$text-color: rgba(255, 255, 255, 0.9);
+$background-color: rgba(0, 0, 0, 0.8);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: $text-color;
+  font-size: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a {
+  color: $text-color !important;
+  transition: color .3s;
+
+  &:hover, &:active {
+    color: white !important;
+  }
+}
+
+.first {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  position: fixed;
+
+  .background {
+    width: 110%;
+    height: 110%;
+    left: -5%;
+    top: -5%;
+    position: absolute;
+    background-image: url(images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left bottom;
+    animation: motion-animation 50s ease-in-out infinite alternate;
+    animation-delay: -1.5s;
+    filter: blur(3px);
+  }
+
+  #eim-chan {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    user-select: none;
+  }
+
+  #eim-chan-cover, #glass-cover, #glass-far-cover {
+    height: 100%;
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+
+  #glass-cover, #glass-far-cover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .eim-chan {
+    position: absolute;
+    top: -30px;
+    left: -10vh;
+    height: 110%;
+    filter: drop-shadow(4px 8px 8px rgba(0,0,0,0.2));
+    animation: motion-animation 50s ease-in-out infinite alternate;
+    animation-delay: -2s;
+  }
+
+  .eim {
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    font-size: 15rem;
+    line-height: 14rem;
+    left: 5vh;
+    font-weight: bold;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+    opacity: 0.6;
+    filter: blur(3px);
+    font-family: Times, Times New Roman, serif;
+    letter-spacing: 0.5rem;
+  }
+
+  .glass {
+    position: absolute;
+    top: 0;
+    left: -25vh;
+    width: 120%;
+    height: 120%;
+    background-image: url(images/glass.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    animation: motion-animation-glass 50s ease-in-out infinite alternate;
+    animation-delay: -0.7s;
+  }
+
+  .glass-far {
+    position: absolute;
+    top: 0;
+    left: -20vh;
+    height: 110%;
+    transform: perspective(200px) rotate(70deg) translate3d(-50px, -40px, 40px);
+    filter: blur(9px) drop-shadow(4px -6px 4px rgba(0, 0, 0, 0.2));
+    animation: motion-animation-glass-far 50s ease-in-out infinite alternate;
+    animation-delay: -0.1s;
+  }
+
+  .tr {
+    position: absolute;
+    right: 26px;
+    bottom: 26px;
+    filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.4));
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      img {
+        width: 100px;
+        margin-left: 0.5rem;
+      }
+  
+      span {
+        font-weight: bolder;
+        font-size: 3.5rem;
+        letter-spacing: 5px;
+      }
+    }
+
+    .slogan {
+      margin-top: -1.3rem;
+      margin-right: 1rem;
+      opacity: 0.6;
+      font-weight: lighter;
+      font-stretch: condensed;
+      text-align: right;
+    }
+  }
+
+  .icons {
+    position: absolute;
+    right: 26px;
+    top: 26px;
+    filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.4));
+    font-size: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+$steps: 10;
+$list-x: [];
+$list-y: [];
+$rotates: [];
+@for $i from 1 through $steps {
+  $list-x:append($list-x, random(30) - 15);
+  $list-y:append($list-y, random(30) - 15);
+  $rotates:append($rotates, random(3) - 2);
+}
+@keyframes motion-animation {
+  $i: 0;
+  @each $t in $list-x {
+    #{(100 * math.div($i, $steps)) + '%'}, #{(100 * math.div($i + 0.5, $steps)) + '%'} {
+      transform: translate(#{$t}px, #{nth($list-y, $i + 1)}px) rotate(#{nth($rotates, $i + 1)}deg);
+    }
+    $i: $i + 1;
+  }
+}
+
+@keyframes motion-animation-glass {
+  $i: 0;
+  @each $t in $list-x {
+    #{(100 * math.div($i, $steps)) + '%'}, #{(100 * math.div($i + 0.5, $steps)) + '%'} {
+      $scale: math.div(random(10), 400);
+      transform: translate(#{$t * 1.8}px, #{nth($list-y, $i + 1) * 1.8}px) scale(1 + $scale) rotate(#{nth($rotates, $i + 1)}deg);
+      filter: blur(1px + $scale * 50px) drop-shadow(4px 6px 4px rgba(0,0,0,0.3));
+    }
+    $i: $i + 1;
+  }
+}
+
+@keyframes motion-animation-glass-far {
+  $i: 0;
+  @each $t in $list-x {
+    #{(100 * math.div($i, $steps)) + '%'}, #{(100 * math.div($i + 0.5, $steps)) + '%'} {
+      $scale: math.div(random(10), 300);
+      transform: translate(#{$t * 4}px, #{nth($list-y, $i + 1) * 4}px) scale(1.5 + $scale) rotate(#{50 + nth($rotates, $i + 1)}deg);
+      // filter: blur($scale * 30px) drop-shadow(4px 6px 4px rgba(0,0,0,0.3));
+    }
+    $i: $i + 1;
+  }
+}
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  
+  a {
+    padding: 0 4px;
+    text-decoration: none;
+    display: flex;
+    font-size: inherit;
+    height: inherit;
+  }
+
+  span {
+    font-size: inherit;
+  }
+
+  .dizzylab {
+    height: inherit;
+    opacity: 0.9;
+    transition: opacity .3s;
+  }
+
+  a:hover .dizzylab {
+    opacity: 1;
+  }
+}
+
+main {
+  z-index: 10;
+  backdrop-filter: blur(10px) brightness(0.5);
+  width: 100%;
+  position: relative;
+  top: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px -3px 5px -1px, rgba(0, 0, 0, 0.14) 0px -6px 10px 0px, rgba(0, 0, 0, 0.12) 0px -1px 18px 0px;
+}
+
+.cover {
+  @extend .shadow;
+  width: 300px;
+}
+
+.second {
+  display: flex;
+  justify-content: center;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+  flex-wrap: wrap;
+  padding: 120px 80px;
+
+  img {
+    margin-right: 4rem;
+  }
+
+  .info {
+    padding: 40px 0;
+  }
+
+  h1 {
+    font-size: 3rem;
+    letter-spacing: 5px;
+    margin: 0;
+  }
+
+  .sub {
+    margin: 0;
+    opacity: 0.7;
+    letter-spacing: 4px;
+  }
+
+  .details { 
+    margin: 4rem 0 0;
+    font-size: 1.3rem;
+    opacity: 0.7;
+    font-weight: lighter;
+    letter-spacing: 3px;
+  }
+
+  .genre {
+    margin: 0;
+    opacity: 0.7;
+    font-weight: lighter;
+    letter-spacing: 3px;
+  }
+
+  .icons {
+    margin-top: 1.4rem;
+    opacity: 0.9;
+    height: 1.8rem;
+    font-size: 1.8rem;
+  }
+
+  iframe {
+    margin-top: 80px;
+    width: 90%;
+    min-width: 800px;
+  }
+}
+
+.third {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+
+  h3 {
+    margin: 0.7rem 0;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    opacity: 0.9;
+    font-weight: lighter;
+    letter-spacing: 1px;
+  }
+
+  .icons {
+    margin-top: -4px;
+    opacity: 0.9;
+    height: 1.5rem;
+    font-size: 1.5rem;
+  }
+}
+
+.end {
+  margin-top: 120px;
+  width: 60%;
+  min-width: 1100px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 80px;
+
+  & > div {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .title {
+    width: 130px;
+    background: #161e3d;
+    text-align: right;
+    padding: 10px;
+    font-size: 0.8rem;
+    margin-right: 1.5rem;
+    flex-shrink: 1;
+  }
+
+  .content {
+    font-weight: lighter;
+    line-height: 2rem;
+    width: 100%;
+    text-align: justify;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    opacity: 0.9;
+    letter-spacing: 1px;
+  }
+}
+
+footer {
+  padding: 8px 0;
+  text-align: center;
+  // background-color: #161e3d;
+  font-weight: lighter;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
